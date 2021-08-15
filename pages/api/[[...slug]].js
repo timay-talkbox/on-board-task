@@ -59,11 +59,17 @@ const toUserObject = ({ id, fields }) => ({
 
 handler.get("/api/admin/user/list", async (req, res) => {
   try {
-    const size = Number(req.query.size);
-    const page = Number(req.query.page);
+    const email = req.query.email || "";
+    const name = req.query.name || "";
+    const size = Number(req.query.size || "10");
+    const page = Number(req.query.page || "1");
     await checkAdmin(req);
     const data = await Users.select({ maxRecords: 1000 }).all();
-    const users = data.map(toUserObject).slice((page - 1) * size, page * size);
+    const users = data
+      .map(toUserObject)
+      .filter((x) => !email || x.email.indexOf(email) >= 0)
+      .filter((x) => !name || x.email.indexOf(name) >= 0)
+      .slice((page - 1) * size, page * size);
     res.send(toResponse({ data: users.map(removePassword) }));
   } catch (error) {
     res.json(
