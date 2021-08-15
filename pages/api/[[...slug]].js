@@ -3,6 +3,26 @@ import getConfig from "next/config";
 import * as bcrypt from "bcrypt";
 import Airtable from "airtable";
 import jwt from "jsonwebtoken";
+import Cors from "cors";
+
+// Initializing the cors middleware
+const cors = Cors({
+  methods: ["GET", "HEAD"],
+});
+
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+
+      return resolve(result);
+    });
+  });
+}
 
 var Users = new Airtable({ apiKey: "keygI9B01Rl28VLMj" }).base(
   "appMagvoR7IoNzb7Q"
@@ -11,6 +31,10 @@ var Users = new Airtable({ apiKey: "keygI9B01Rl28VLMj" }).base(
 const { serverRuntimeConfig } = getConfig();
 
 const handler = nextConnect({ attachParams: true });
+
+handler.use(async (req, res) => {
+  await runMiddleware(req, res, cors);
+});
 
 const getAllUsers = async () => {
   const _data = await Users.select({ maxRecords: 1000 }).all();
