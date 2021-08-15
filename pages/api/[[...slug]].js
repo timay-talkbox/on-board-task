@@ -79,7 +79,7 @@ handler.get("/api/admin/user/list", async (req, res) => {
 
 handler.post("/api/app/user/register", async (req, res) => {
   try {
-    const users = getAllUsers();
+    const users = await getAllUsers();
     const { displayName, email, password } = req.body;
     const hasRegistered = !!users.find((user) => user.email === email);
 
@@ -211,7 +211,7 @@ handler.post("/api/admin/user/approve", async (req, res) => {
       toResponse({
         error: {
           msgCode: 900,
-          message: "Failed to approve",
+          message: error.message || "Failed to approve",
         },
       })
     );
