@@ -1,0 +1,25 @@
+{
+  "name": "on-board-task",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "airtable": "^0.11.1",
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "next": "11.1.0",
+    "next-connect": "^0.10.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.0"
+  }
+}
